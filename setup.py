@@ -13,7 +13,7 @@ with codecs.open('README.rst', encoding='utf8') as f:
 setup(
     name='sphinxcontrib-log-cabinet',
     version='1.0.0',
-    url='http://bitbucket.org/davidism/sphinxcontrib-log-cabinet',
+    url='https://github.com/davidism/sphinxcontrib-log-cabinet',
     license='BSD',
     author='David Lord',
     author_email='davidism@gmail.com',
