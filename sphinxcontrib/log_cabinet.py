@@ -59,7 +59,7 @@ def handle_doctree_resolved(app, doctree, docname):
 
 class ChangelogVisitor(nodes.GenericNodeVisitor):
     def __init__(self, document, app):
-        super(ChangelogVisitor, self).__init__(document)
+        nodes.GenericNodeVisitor.__init__(self, document)
         self.logs = []
 
     def default_visit(self, node):
