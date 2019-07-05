@@ -40,7 +40,14 @@ def handle_doctree_resolved(app, doctree, docname):
     version = _parse_placeholder_version(app.config.version)
 
     for after, log in visitor.logs:
-        index = after.parent.index(after) + 1 if after is not None else 0
+        if after is None:
+            # log was the first element of a page
+            after = log[0]
+            index = 0
+        else:
+            # log came after other nodes on the page
+            index = after.parent.index(after) + 1
+
         del after.parent[index : index + len(log)]
 
         if not collapse_all:
