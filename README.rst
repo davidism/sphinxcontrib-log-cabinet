@@ -23,7 +23,7 @@ Enable:
 
 Configure:
 
-.. code-block:: python
+``log_cabinet_collapse_all``
 
-    # False means current changes and all deprecations are not collapsed
-    changelog_collapse_all = False
+    By default, current changes and deprecations are not collapsed. Set
+    this to ``True`` to collapse all changes.

@@ -8,6 +8,8 @@ Unreleased
     be seen as "1.1" for hiding old log entries. :pr:`5`
 -   Fix error when log entries are at the very top of a page before any
     other content. :issue:`3`
+-   Config is now prefixed with ``log_cabinet_`` instead of
+    ``changelog_``. The old names are deprecated. :pr:`7`
 
 
 1.0.0
