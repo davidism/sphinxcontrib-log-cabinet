@@ -3,12 +3,14 @@ from itertools import groupby
 from docutils import nodes
 from packaging.version import parse as parse_version
 from sphinx.addnodes import versionmodified
+from sphinx.util import logging
 
 __version__ = "1.0.1.dev"
+logger = logging.getLogger(__name__)
 
 
 def setup(app):
-    app.add_config_value("changelog_collapse_all", False, "html")
+    app.add_config_value("log_cabinet_collapse_all", False, "html")
     app.connect("doctree-resolved", handle_doctree_resolved)
     app.add_node(
         CollapsedLog,
@@ -18,7 +20,18 @@ def setup(app):
         man=(visit_nop, visit_nop),
         texinfo=(visit_nop, visit_nop),
     )
+    app.add_config_value("changelog_collapse_all", None, "")
+    app.connect("config-inited", check_deprecated_config)
     return {"version": __version__}
+
+
+def check_deprecated_config(app, config):
+    if config.changelog_collapse_all is not None:
+        logger.warning(
+            "The 'changelog_collapse_all' config has been renamed to"
+            " 'log_cabinet_collapse_all'. The old name will be removed"
+            " in version 1.1.0."
+        )
 
 
 def _parse_placeholder_version(value, placeholder="x"):
