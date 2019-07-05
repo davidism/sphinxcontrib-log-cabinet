@@ -1,7 +1,7 @@
 from itertools import groupby
 
 from docutils import nodes
-from pkg_resources import parse_version
+from packaging.version import parse as parse_version
 from sphinx.addnodes import versionmodified
 
 __version__ = "1.0.1.dev"
@@ -18,15 +18,26 @@ def setup(app):
         man=(visit_nop, visit_nop),
         texinfo=(visit_nop, visit_nop),
     )
-
     return {"version": __version__}
+
+
+def _parse_placeholder_version(value, placeholder="x"):
+    """Strip version suffix (1.1.x to 1.1) before parsing version.
+
+    :param value: Version string to parse.
+    :param placeholder: Suffix to strip from the version string.
+    """
+    if value.endswith(".{}".format(placeholder)):
+        value = value[: -(len(placeholder) + 1)]
+
+    return parse_version(value)
 
 
 def handle_doctree_resolved(app, doctree, docname):
     visitor = ChangelogVisitor(doctree, app)
     doctree.walk(visitor)
     collapse_all = app.config.changelog_collapse_all
-    version = parse_version(app.config.version)
+    version = _parse_placeholder_version(app.config.version)
 
     for after, log in visitor.logs:
         index = after.parent.index(after) + 1 if after is not None else 0
@@ -47,9 +58,10 @@ def handle_doctree_resolved(app, doctree, docname):
                 index += len(visible)
                 log = hidden
 
-        collapsed = CollapsedLog()
-        collapsed.extend(log)
-        after.parent.insert(index, collapsed)
+        if log:
+            collapsed = CollapsedLog()
+            collapsed.extend(log)
+            after.parent.insert(index, collapsed)
 
 
 class ChangelogVisitor(nodes.GenericNodeVisitor):
