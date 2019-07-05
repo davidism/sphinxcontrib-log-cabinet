@@ -5,7 +5,7 @@ from packaging.version import parse as parse_version
 from sphinx.addnodes import versionmodified
 from sphinx.util import logging
 
-__version__ = "1.0.1.dev"
+__version__ = "1.0.1"
 logger = logging.getLogger(__name__)
 
 
